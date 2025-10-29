@@ -1,5 +1,4 @@
-// file-operation.js
-const fs = require('fs');
+const fs = require('fs').promises;
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -11,13 +10,21 @@ if (!filename) {
   process.exit(1);
 }
 
-const content = 'В файл записан новвый текст';
+const content = 'В файл записан новый текст';
 
-// Создаем и записываем файл
-fs.writeFileSync(filename, content, 'utf8');
-console.log(`Файл "${filename}" успешно создан и записан`);
+async function main() {
+  try {
+    
+    await fs.writeFile(filename, content, 'utf8');
+    console.log(`Файл "${filename}" успешно создан и записан`);
 
-// Читаем и выводим содержимое файла
-const data = fs.readFileSync(filename, 'utf8');
-console.log('\nСодержимое файла:');
-console.log(data);
+    
+    const data = await fs.readFile(filename, 'utf8');
+    console.log('\nСодержимое файла:');
+    console.log(data);
+  } catch (err) {
+    console.error('Ошибка при работе с файлом:', err.message);
+  }
+}
+
+main();
